@@ -46,5 +46,38 @@ example)
 요청이 많아지면 EC2를 만들고 EC2가 Online이 되면 ELB에 메세지를 날려 처리를 시작
 요청이 적어지면 EC2에 남은 처리를 다 끝낸뒤 종료함
 
+### 메시징 및 대기열
+- 밀결합된 애플리케이션 : 하나의 장애가 다른곳의 장애를 일으키는 아키텍처
+<img src="https://user-images.githubusercontent.com/57505385/215297943-1ae9ec77-8ab6-4b25-922c-6f6af46640aa.png" width="40%">
+- 소결합된 애플리케이션 : 하나의 장애가 발생해도 다른곳으로 장애가 퍼지지 않는 아키텍처
+<img src="https://user-images.githubusercontent.com/57505385/215297963-cda315ef-bcca-4dbe-847f-58c1df8b0f2e.png" width="40%">
 
+#### Amazon Simple Notification Service(Amazon SNS)
+Amazon Simple Notification Service(Amazon SNS)는 게시/구독 서비스입니다. 
+게시자는 Amazon SNS 주제를 사용하여 구독자에게 메시지를 게시합니다. 
+이는 커피숍에서 계산원이 음료를 만드는 바리스타에게 주문 사항을 전달하는 것과 비슷합니다.
+Amazon SNS에서 구독자는 웹 서버, 이메일 주소, AWS Lambda 함수 또는 그 밖의 여러 옵션이 될 수 있습니다. 
+
+### 추가 컴퓨팅 서비스
+- 서버리스 : 기본 인프라를 보거나 액세스 할 수 없음
+
+#### AWS Lambda 
+- 서버리스 컴퓨팅 옵션의 대표적인 서비스
+- 사용자가 코드를 Lambda 함수라는 곳에 업로드 할수있게 도와주는 서비스
+- 서비스가 트리거를 기다리다 감지되면 관리형 환경에서 자동으로 실행이 됨.
+- 실행 시간이 15분 미만이여야 함
+- 15분이 걸리지 않는 빠른 처리에 적합
+- 코드를 실행하는 동안에만 요금이 부과됨
+
+#### Amazon Elastic Container Service (ECS), Amazon Elastic Kubernetes Service (EKS)
+- 컨테이너(도커) 오케스트레이션 도구 
+- 운영체제수준에서의 가상화를 제공
+- 이 경우 EC2에서 실행할 수 있음
+
+-> 기본적인 OS에 액세스할 필요 없거나 EC2 를 컨트롤 하지 않아도 되는 경우는 AWS Fargate 를 사용하는게 좋음
+#### AWS Fargate 
+- AWS Fargate는 컨테이너용 서버리스 컴퓨팅 엔진으로, Amazon ECS와 Amazon EKS에서 작동
+- AWS Fargate를 사용하는 경우 서버를 프로비저닝하거나 관리할 필요가 없음
+- AWS Fargate는 자동으로 서버 인프라를 관리
+- 컨테이너를 실행하는 데 필요한 리소스에 대해서만 비용을 지불하면 됩니다.
 
