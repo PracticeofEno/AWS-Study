@@ -40,7 +40,8 @@
 ### Elastic Load Balancing 
 - 리전 수준 구조 : EC2가 아닌 리전 수준에서 실행됨으로 사용자가 추가적으로 작업하지 않아도 자동으로 고가용성으로 확장 
 - 외부에서만 사용되는게 아니고 FrontEnd EC2와 Backend EC2 사이에도 위치함
-<img src="https://user-images.githubusercontent.com/57505385/215297634-e98f4395-c88b-4b27-b537-55bf2d1d57e8.png" width="40%"> to <img src="https://user-images.githubusercontent.com/57505385/215297666-1a267cae-4e44-490d-94c5-36ad185d127c.png" width="40%">
+<img src="https://user-images.githubusercontent.com/57505385/215297634-e98f4395-c88b-4b27-b537-55bf2d1d57e8.png" width="40%"> 
+<img src="https://user-images.githubusercontent.com/57505385/215297666-1a267cae-4e44-490d-94c5-36ad185d127c.png" width="40%">
 example)
 [요청] <- ELB -> [EC2]
 요청이 많아지면 EC2를 만들고 EC2가 Online이 되면 ELB에 메세지를 날려 처리를 시작
