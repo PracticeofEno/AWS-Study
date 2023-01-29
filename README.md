@@ -88,3 +88,82 @@ Amazon SNS에서 구독자는 웹 서버, 이메일 주소, AWS Lambda 함수 �
 3. AWS SDK -> 개발자 도구를 통해서 프로그래밍형태로
 4. AWS Elastic Beanstalk -> 사용자가 코드 및 구성 설정을 제공하면 Elastic Beanstalk이 다음 작업을 수행하는 데 필요한 리소스를 배포
 5. AWS CloudFormation ->  코드 줄을 작성하여 환경을 구축할 수 있음 (ex. json / yaml)
+
+### 네트워킹
+- Amazon VPC를 이용하여 가상 네트워크 리소스를 구축 가능.
+- 인터넷 게이트웨이를 사용해서 open 가능  
+<img src="https://user-images.githubusercontent.com/57505385/215354250-d4eb184e-c7d0-4f3f-adb3-46e5aeb90a4c.png" width="60%">
+- 가상 프라이빗 게이트웨이 : 특정 경로만 허용하고 다 차단한 상태(트래픽 통로는 공유함)
+<img src="https://user-images.githubusercontent.com/57505385/215354276-bf17f30f-f2cd-4d9b-badc-acd895e045f0.png" width="60%">
+- Amazon Direct Connect : 직접 회선 따서 연결
+<img src="https://user-images.githubusercontent.com/57505385/215354429-23fee190-ced5-4dd5-acc5-788277986dbd.png" width="60%">
+- 서브넷 : 서브넷은 보안 또는 운영 요구 사항에 따라 리소스를 그룹화할 수 있는 VPC 내의 한 섹션입니다. 서브넷은 퍼블릭 또는 프라이빗일 수 있습니다.
+<img src="https://user-images.githubusercontent.com/57505385/215354875-5673330e-328a-4e0f-956d-8dd047c9a47c.png" width="60%">
+- 네트워크 ACL(액세스 제어 목록) : 네트워크 ACL(액세스 제어 목록)은 서브넷 수준에서 인바운드 및 아웃바운드 트래픽을 제어하는 가상 방화벽
+- 보안 그룹 : Amazon EC2 인스턴스에 대한 인바운드 및 아웃바운드 트래픽을 제어하는 가상 방화벽
+- 총 구성 
+<img src="https://user-images.githubusercontent.com/57505385/215354991-fea84b77-d2dd-47cc-90fd-cc9c43cac17c.png" width="60%">
+
+
+### 스토리지 및 데이터베이스
+- 블록 수준 스토리지 : SSD, 하드디스크 같은 자주 변경되는 데이터유형
+- EC2를 실행하면 인스턴스 스토리지 볼륨이라는 곳에 기본적으로 저장됨 -> 중단하면 스토리지가 날아감(휘발성)
+
+#### Amazon Elastic Block Store (EBS)
+1. 재시작해도 안날아감 따로 저장됨
+2. 크기, 유형, 구성을 정의하고 프로비저닝함
+3. 스냅샷 이라고 하는 증분 백업을 만들 수 있음. ★
+<img src="https://user-images.githubusercontent.com/57505385/215355785-faa86b81-34fe-447a-8960-395a3ba1d42e.png" width="60%">
+
+#### Amasozn Simple Storage Service (S3)
+- 데이터를 객체로 저장 ★
+- 일부 객체가 변경될때마다 전체 파일을 다시 업데이트 ★
+- 객체를 버킷(파일디렉토리같은)에 저장
+- 최대 5TB크기의 객체를 업로드
+- 객체 버전 관리
+- 여러 버킷 생성(자주 접속 or 장기간 보관)
+- 정적 웹사이트 호스팅 가능 
+- 리전별 분산 (99.999999% 안전, 그냥 안전)
+- S3 Standard-IA : 액세스 빈도는 낮지만 필요할 경우 빠르게 액세스 해야하는 경우(백업,재해복구 파일 등)
+- Amazon S3 Glacier : S3를 글래시어로 저장가능. 데이터 유지기간 같은, 정책으로 읽고쓰기 제어 가능, 한번 잠금하면 변경 불가
+- Amazon S3 수명주기 설정 : 일정 시간이 지나면 계층 사이에서 데이터를 자동으로 이동
+
+#### Amazon Elastic File Stytem(EFS)
+- 여러 인스턴스가 동시에 EFS의 데이터에 액세스 가능
+- EFS -> Linux 파일 시스템, 리전 영역 리소스(리전은 여러개의 가용영역), 자동 확장
+- EBS와 다른점 -> EBS는 인스턴스에 볼륨연결, 가용영역 수준의 리소스, EC2인스턴스를 연결하려면 동일한 가용영역에 있어야 함, 볼륨이 자동으로 확장되지 않음
+
+#### Amazon Relational Database Service(Amazon RDS)
+- 리프트 앤 시프트 마이그레이션 : 온프레미스 환경에서 클라우드로 
+- 자동패치, 백업, 이중화 , 장애조치, 재해 복구
+- Amazon Aurora :엔터프라이즈급 관계형 데이터베이스. 이 데이터베이스는 MySQL 및 PostgreSQL 관계형 데이터베이스와 호환. 표준 MySQL 데이터베이스보다 최대 5배 빠르며 표준 PostgreSQL 데이터베이스보다 최대 3배 빠름, 데이터를 가용영역에 복제해서 안전하며 S3에 지속적으로 백업
+
+#### Amazon Dynamo DB (NoSQL 데이터베이스 서비스인듯)
+- 비관계형 데이터베이스
+- NoSQL의 특성을 지님
+- 서버리스 데이터 베이스
+
+#### Amazon Refshift : 빅데이터 vI솔루션이 필요할때 단일 API호출로 실행할 수 있다는것
+#### AWS Database <igration Service (amazon DMS)
+- 기존 데이터베이스를 안전하고 쉽게 AWS로 마이그레이션 할수있음
+- 마이그레이션이 진행되는 동안 소스 데이터베이스의 모든 기능이 정상 동작
+- 원본 데이터베이스와 대상 데이터베이스의 유형이 동일하지 않아도 됨.
+- 개발 및 테스트 데이터베이스 마이그레이션
+- 데이터베이스 통합
+- 연속 복제 등에 사용
+- 동종 데이터베이스 (동종 마이그레이션)
+: 스키마구조, 데이터유형, 데이터베이스 코드가 호환됨.
+: 온프레이스 or EC2 or REDS  -> Amazon EC2, Amazon blabla
+- 이종 데이터베이스 (이종 마이그레이션)
+1단계 : 스키마구조, 데이터유형, 데이터베이스 코드가 다름 -> Amazon Scheama Convertsion 실행 -> 스키마구조, 데이터베이스 코드 가 변환
+2단계 : DMS를 사용하여 마이그레이션
+
+### 보안
+#### IAM : Identity Acess Management 
+- AWS 서비스와 리소스에 대한 액세스를 안전하게 관리
+- IAM 사용자, 그룹 및 역할
+- IAM 정책
+- Multi-Factor Authentication
+example)
+<img src="https://user-images.githubusercontent.com/57505385/215361066-8b7bf82c-d512-48f6-af67-24e500dce9a4.png" width="40%">
+
